@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <report
+            id="action_stock_pdf"
+            model="stock.quantity.history"
+            string="Inventory Stock Report"
+            report_type="qweb-pdf"
+            name="report_stock_inventory.report_stock_pdf"
+            file="report_stock_inventory.report_stock_pdf"
+    />
+
+</odoo>

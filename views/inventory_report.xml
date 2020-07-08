@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="inventory_report_view">
+        <field name="name">stock.quantity.history.inherit</field>
+        <field name="model">stock.quantity.history</field>
+        <field name="inherit_id" ref="stock.view_stock_quantity_history"/>
+        <field name="arch" type="xml">
+            <field name="inventory_datetime" position="after">
+                <field name="location" widget="many2many_tags"/>
+                <field name="category" widget="many2many_tags"/>
+            </field>
+            <xpath expr="//button[@name='open_at_date']" position="after">
+                <button string="PDF" name="print_pdf" type="object" default_focus="1" class="btn-primary"/>
+                <!-- <button string="Excel" name="xlsx_report" type="object" default_focus="1" class="btn-primary"/> -->
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
