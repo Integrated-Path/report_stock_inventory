@@ -22,7 +22,7 @@
 
 {
     'name': 'Inventory Report In PDF and Excel',
-    'version': '13.0.1.0.0',
+    'version': '13.0.1.1.1',
     'summary': 'This module helps to Create and Print inventory reports in Excel (XLSX) and PDF format.',
     'description': """This module helps to Create and Print inventory reports in Excel (XLSX) and PDF format,Excel Report,Xlsx.PDF Report,Report,Inventory.""",
     'category': 'Warehouse',
@@ -33,12 +33,21 @@
     'depends': ['base', 'stock'],
     'data': [
         'views/inventory_report.xml',
-        'views/action_manager.xml',
+        # 'views/action_manager.xml',
         'reports/report_templates.xml',
         'reports/inventory_stock_pdf.xml'
     ],
     'qweb': [
     ],
+    'assets': {
+        # 'web.assets_qweb': [
+        #     'naseem_warth/static/src/xml/pos_receipt.xml',
+        # ],
+        'web.assets_backend': [
+            'report_stock_inventory/static/src/js/action_manager.js',
+        ],
+    },
+
     'images': ['static/description/banner.png'],
     'license': 'OPL-1',
     'price': 20,

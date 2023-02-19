@@ -1,160 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-    <template id="second_inventory_custom_external_layout">
-        <!-- <div class="header">
-            <div class="row">
-                <div class="col-3 mb4">
-                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 45px;" alt="Logo"/>
-                </div>
-                <div class="col-9 text-right" style="margin-top:22px;" t-field="company.report_header" name="moto"/>
-            </div>
-            <div t-if="company.logo or company.report_header" class="row zero_min_height">
-                <div class="col-12">
-                    <div style="border-bottom: 1px solid black;"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6" name="company_address">
-                    <div t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}"/>
-                </div>
-            </div>
-
-        </div> -->
-        <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="row mt32 mb20" id="informations" style="font-family: Arial, serif;">
-                <div align="left" class="col-5">
-                    <h2 align="left">
-                        <p style="font-size:28px;border-bottom: 2px solid black;padding-bottom: 10px;">
-                            الشركة‬ ‫الحدیثة‬ ‫لصناعة‬ <br/>
-                            ‫الادویة‬	‫والمستلزمات‬ ‫الطبیة‬
-                        </p>
-                    </h2>
-                </div>
-
-                <div align="center" class="col-2 text-center">
-                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" class="img" alt="Logo" style="width: 132px;"/>
-                </div>
-
-                <div align="center" class="col-5">
-                    <h2>
-                        <p style="font-size:25px ;border-bottom: 2px solid black;padding-bottom: 10px;">
-                            THE MODERN COMPANY <br/>
-                            FOR DRUG INDUSTRIES
-                        </p>
-                    </h2>
-                </div>
-                <div style="border-bottom: 1px solid black;"/>
-            </div>
-        </div>
-
-
-        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <t t-call="web.address_layout"/>
-            <t t-raw="0"/>
-        </div>
-
-        <!-- <div class="footer o_standard_footer">
-            <div class="text-center" style="border-top: 1px solid black;">
-                <ul class="list-inline mb4">
-                    using the list-inline-item class from bootstrap causes weird behaviours in pdf report
-                         adding d-inline class fixes the problem
-                    <li t-if="company.phone" class="list-inline-item d-inline">Phone: <span t-field="company.phone"/></li>
-                    <li t-if="company.email" class="list-inline-item d-inline">Email: <span t-field="company.email"/></li>
-                    <li t-if="company.website" class="list-inline-item d-inline">Web: <span t-field="company.website"/></li>
-                    <li t-if="company.vat" class="list-inline-item d-inline"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>
-                </ul>
-
-                <div name="financial_infos">
-                    <span t-field="company.report_footer"/>
-                </div>
-
-                <div t-if="report_type == 'pdf'" class="text-muted">
-                    Page: <span class="page"/> / <span class="topage"/>
-                </div>
-            </div>
-        </div> -->
-    </template>
-
-	<template id="inventory_custom_external_layout">
-
-        <t t-if="not o" t-set="o" t-value="doc"/>
-
-        <t t-if="not o" t-set="o" t-value="doc"/>
-
-        <t t-if="not company">
-            <!-- Multicompany -->
-            <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
-            </t>
-            <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-        </t>
-
-        <t t-esc="company.update_scss()"/>
-
-        <t t-call="report_stock_inventory.second_inventory_custom_external_layout">
-            <t t-raw="0"/>
-        </t>
-
-
-        <!-- <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>
-        <t t-else="else" t-call="report_stock_inventory.second_inventory_custom_external_layout">
-            <t t-raw="0"/>
-        </t> -->
-
-    </template>
-
-
     <template id="report_stock_pdf">
         <t t-call="web.html_container">
-            <!-- <t t-call="web.external_layout"> -->
-            <t t-call="report_stock_inventory.inventory_custom_external_layout">
+            <t t-call="web.external_layout">
                 <div class="page">
-                    <!-- <h1 style="position: fixed; top: 0; width: 100%; background-color: white;">تقرير جدر المخزون</h1> -->
                     <br></br>
-                    <div class="row mt12" style="font-family: Arial !important; font-size: large;">
+                    <div class="row mt32">
                         <div class="col-xs-3">
-                            <strong style="color: #00802b;">التاريخ:</strong>
+                            <strong>Date:</strong>
                             <t t-esc="inventory_date"/>
                         </div>
                     </div>
                     <t t-if="loc_name">
-                        <div class="row mt12" style="font-family: Arial !important; font-size: large;">
+                        <div class="row mt32">
                             <div class="col-xs-3">
-                                <strong style="color: #00802b;">الموقع:</strong>
+                                <strong>Location(s):</strong>
                                 <t t-esc="loc_name"/>
                             </div>
                         </div>
                     </t>
                     <t t-if="categ_name">
-                        <div class="row mt12" style="font-family: Arial !important; font-size: large;">
+                        <div class="row mt32">
                             <div class="col-xs-3">
-                                <strong style="color: #00802b;">القسم:</strong>
+                                <strong>Categories:</strong>
                                 <t t-esc="categ_name"/>
                             </div>
                         </div>
                     </t>
                 </div>
-                <br/>
+
+
+                
+                <t t-if="locations_info">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th align="left">Location Name</th>
+                                <th align="left">Quantity</th>
+                                <th align="left">Products Count</th>
+                                <th align="left">Ref</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="locations_info" t-as="line">
+                                <td align="left">
+                                    <span t-esc="line['location_name']"/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line['total_quant']"/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line['line_count']"/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line['ref']"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+
+
                 <t t-if="docs">
                     <table class="table table-condensed">
                         <thead>
                             <tr>
-                                <th align="right">رقم</th>
-                                <!-- <th align="left">Internal Reference</th> -->
-                                <th align="right">الرقم الرمزي</th>
-                                <!-- <th align="left">Product</th> -->
-                                <th align="right">الاسم</th>
-                                <!-- <th align="left">Location</th> -->
-                                <th align="right">الموقع</th>
-                                <!-- <th align="right">Quantity</th> -->
-                                <th align="right">الكمية</th>
-                                <!-- <th align="left">Unit</th> -->
+                                <th align="left">SN0</th>
+                                <th align="left">Internal Reference</th>
+                                <th align="left">Product</th>
+                                <th align="left">Location</th>
+                                <th align="right">Quantity</th>
+                                <th align="left">Unit</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -165,65 +81,29 @@
                                     <span t-esc="s_no"/>
                                 </td>
                                 <td align="left">
-                                    <span t-esc="line['default_code']"/>
+                                    <span t-esc="line['product'].default_code"/>
                                 </td>
                                 <td align="left">
-                                    <span t-esc="line['name']"/>
+                                    <span t-esc="line['product'].name"/>
                                 </td>
                                 <td align="left">
-                                    <span t-esc="line['loc_name']"/>
+                                    <span t-esc="line['location']"/>
                                 </td>
                                 <td align="right">
-                                    <span t-esc="line['quantity']"/>
+                                    <span t-esc="line['qty_available']"/>
                                 </td>
                                 <td align="left">
-                                    <span t-="_tran_unit(line['unit'])"/>
+                                    <span t-esc="line['uom_id']"/>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </t>
-                <t t-if="doc_quantities">
-                    <table class="table table-condensed">
-                        <thead class="mt12">
-                            <tr style="font-family: Arial !important;">
-                                <th style="text-align: center;">التسلسل</th>
-                                <!-- <th align="left">Internal Reference</th> -->
-                                <th style="text-align: center;">الرقم الرمزي</th>
-                                <!-- <th align="left">Product</th> -->
-                                <th style="text-align: center;">الاسم</th>
-                                <!-- <th align="left">Location</th> -->
-                                <th style="text-align: center;">الكمية</th>
-                                <!-- <th align="right">Quantity</th> -->
-                                <th style="text-align: center;">وحدة القياس</th>
-                                <!-- <th align="left">Unit</th> -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-set="s_no" t-value="0"/>
-                            <tr t-foreach="doc_quantities" t-as="line">
-
-                                <t t-set="s_no" t-value="s_no+1"/>
-                                <td style="text-align: center;">
-                                    <span t-esc="s_no"/>
-                                </td>
-                                <td style="text-align: center;">
-                                    <span t-esc="line['default_code']"/>
-                                </td>
-                                <td style="text-align: center;">
-                                    <span t-esc="line['name']"/>
-                                </td>
-                                <td style="text-align: center;">
-                                    <span t-esc="line['loc_total']"/>
-                                </td>
-                                <td style="text-align: center;">
-                                    <span t-esc="line['unit_name']"/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div style='border:1px solid #222;text-align:center;font-size:30px;color:#4D7CF7;padding:20px;'>
+                        Total: <span t-esc="total"/>
+                    </div>
                 </t>
             </t>
         </t>
     </template>
 </odoo>
+

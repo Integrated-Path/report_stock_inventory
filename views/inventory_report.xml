@@ -8,10 +8,11 @@
             <field name="inventory_datetime" position="after">
                 <field name="location" widget="many2many_tags"/>
                 <field name="category" widget="many2many_tags"/>
+                <field name="include_lines"/>
             </field>
             <xpath expr="//button[@name='open_at_date']" position="after">
                 <button string="PDF" name="print_pdf" type="object" default_focus="1" class="btn-primary"/>
-                <!-- <button string="Excel" name="xlsx_report" type="object" default_focus="1" class="btn-primary"/> -->
+                <button string="Excel" name="xlsx_report" type="object" default_focus="1" class="btn-primary"/>
             </xpath>
         </field>
     </record>
