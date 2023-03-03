@@ -4,7 +4,6 @@ import datetime
 from odoo import models, api
 
 
-
 class InventoryReportPDF(models.AbstractModel):
     _name = "report.report_stock_inventory.report_stock_pdf"
 
@@ -13,11 +12,11 @@ class InventoryReportPDF(models.AbstractModel):
         quantities_at_date = 0
 
         if data['category']:
-            products = self.env['product.product'].search([('categ_id','in',data['category']),('type','=','product')])
+            products = self.env['product.product'].search(
+                [('categ_id', 'in', data['category']), ('type', '=', 'product')])
         else:
-            products = self.env['product.product'].search([('type','=','product')])
+            products = self.env['product.product'].search([('type', '=', 'product')])
         product_dict = []
-
 
         # get the stock moves backward until the given string date from the wizard and store it at stock_moves_to_date.
         stock_moves = self.env['stock.move'].search([])
@@ -30,22 +29,25 @@ class InventoryReportPDF(models.AbstractModel):
         for product in products:
             for location in data['location']:
                 # calculate the quantity at location and date backward from stock quant and stock move tables.
-                quantity_at_location_date = self.env['stock.quant'].search([('product_id','=',product.id),('location_id','=',location)]).quantity
+                quantity_at_location_date = self.env['stock.quant'].search(
+                    [('product_id', '=', product.id), ('location_id', '=', location)]).quantity
                 for stock_move_to_date in stock_moves_to_date:
-                    if(stock_move_to_date.product_id.id == product.id and stock_move_to_date.location_id.id == location and stock_move_to_date.state == 'done'):
+                    if (
+                            stock_move_to_date.product_id.id == product.id and stock_move_to_date.location_id.id == location and stock_move_to_date.state == 'done'):
                         quantity_at_location_date = quantity_at_location_date + stock_move_to_date.product_qty
-                    elif(stock_move_to_date.product_id.id == product.id and stock_move_to_date.location_dest_id.id == location and stock_move_to_date.state == 'done'):
+                    elif (
+                            stock_move_to_date.product_id.id == product.id and stock_move_to_date.location_dest_id.id == location and stock_move_to_date.state == 'done'):
                         quantity_at_location_date = quantity_at_location_date - stock_move_to_date.product_qty
-                if(quantity_at_location_date > 0):
+                if (quantity_at_location_date > 0):
                     total_quantity = total_quantity + quantity_at_location_date
                     product_dict.append(
                         {
                             'product': product,
-                            'qty_available':int(quantity_at_location_date),
-                            'uom_id':product.uom_id.name,
-                            'location':self.env['stock.location'].search([('id','=',location)]).name,
+                            'qty_available': int(quantity_at_location_date),
+                            'uom_id': product.uom_id.name,
+                            'location': self.env['stock.location'].search([('id', '=', location)]).name,
                         })
-        
+
         return {
             'docs': product_dict,
             'doc_quantities': quantities_at_date,

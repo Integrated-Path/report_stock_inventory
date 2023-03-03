@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+                id="stock_inventory_def_reports_xlsx_id"
+                model="stock.quantity.history"
+                string="Inventory Stock Report"
+                report_type="xlsx"
+                name="report_stock_inventory.st_reports_xlsx_id"
+                file="report_stock_inventory.st_reports_xlsx_id"
+                attachment_use="False"
+        />
+
+
+    </data>
+</odoo>

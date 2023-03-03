@@ -30,9 +30,10 @@
     'company': 'Cybrosys Techno Solutions',
     'author': 'Cybrosys Techno Solutions',
     'website': 'https://www.cybrosys.com',
-    'depends': ['base', 'stock'],
+    'depends': ['base', 'stock', 'report_xlsx'],
     'data': [
         'views/inventory_report.xml',
+        'views/inventor_stock_xlsx.xml',
         # 'views/action_manager.xml',
         'reports/report_templates.xml',
         'reports/inventory_stock_pdf.xml'

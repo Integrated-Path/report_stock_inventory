@@ -39,7 +39,7 @@ ActionManager.include({
      * @private
      */
     _handleAction: function (action, options) {
-        if (action.type === 'ir_actions_xlsx_download') {
+        if (action.type === 'ir.actions.act_window') {
             return this._executexlsxReportDownloadAction(action, options);
         }
         return this._super.apply(this, arguments);

@@ -24,7 +24,8 @@ except ImportError:
 class InventoryReport(models.TransientModel):
     _inherit = 'stock.quantity.history'
 
-    location = fields.Many2many('stock.location', string='Location', domain="[('usage', '=', 'internal')]", help="Location Filter", required=True)
+    location = fields.Many2many('stock.location', string='Location', domain="[('usage', '=', 'internal')]",
+                                help="Location Filter", required=True)
     category = fields.Many2many('product.category', string='Category', help="Category Filter")
     include_lines = fields.Boolean(string="Include Lines", default=True)
 
@@ -47,14 +48,16 @@ class InventoryReport(models.TransientModel):
             'categ_name': categ_name,
             'inventory_date': inventory_date
         }
-        return {
-            'type': 'ir_actions_xlsx_download',
-            'data': {'model': 'stock.quantity.history',
-                     'options': json.dumps(data, default=date_utils.json_default),
-                     'output_format': 'xlsx',
-                     'report_name': 'Inventory Stock Report',
-                     }
-        }
+        return self.env.ref('report_stock_inventory.stock_inventory_def_reports_xlsx_id').report_action([], data)
+
+        # return {
+        #     'type': 'ir_actions_xlsx_download',
+        #     'data': {'model': 'stock.quantity.history',
+        #              'options': json.dumps(data, default=date_utils.json_default),
+        #              'output_format': 'xlsx',
+        #              'report_name': 'Inventory Stock Report',
+        #              }
+        # }
 
     def print_pdf(self):
         inventory_date = self.inventory_datetime.strftime('%Y-%m-%d')
@@ -79,10 +82,14 @@ class InventoryReport(models.TransientModel):
 
         return self.env.ref('report_stock_inventory.action_stock_pdf').report_action(self, data)
 
-    def get_xlsx_report(self, data, response):
-        output = io.BytesIO()
-        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-        sheet = workbook.add_worksheet()
+
+class PartnerXlsxStockReport(models.AbstractModel):
+    _name = "report.report_stock_inventory.st_reports_xlsx_id"
+    _inherit = "report.report_xlsx.abstract"
+    _description = "Sale XLSX Report"
+
+    def generate_xlsx_report(self, workbook, data, docs):
+        sheet = workbook.add_worksheet('Stock xlsx Report')
         format1 = workbook.add_format({'font_size': 16, 'align': 'center', 'bg_color': '#D3D3D3', 'bold': True})
         format1.set_font_color('#000080')
         format2 = workbook.add_format({'font_size': 12, 'bold': True, 'border': 1, 'bg_color': '#928E8E'})
@@ -96,9 +103,10 @@ class InventoryReport(models.TransientModel):
         format6.set_align('right')
         format9.set_align('left')
         if data['category']:
-            product = self.env['product.product'].search([('categ_id', 'in', data['category']),('type','=','product')])
+            product = self.env['product.product'].search(
+                [('categ_id', 'in', data['category']), ('type', '=', 'product')])
         else:
-            product = self.env['product.product'].search([('type','=','product')])
+            product = self.env['product.product'].search([('type', '=', 'product')])
 
         if data['date']:
             sheet.write('A2', 'Date:', format6)
@@ -137,7 +145,7 @@ class InventoryReport(models.TransientModel):
             s_no += 1
             j += 1
 
-        workbook.close()
-        output.seek(0)
-        response.stream.write(output.read())
-        output.close()
+        # workbook.close()
+        # output.seek(0)
+        # response.stream.write(output.read())
+        # output.close()
