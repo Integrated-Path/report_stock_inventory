@@ -104,9 +104,9 @@ class PartnerXlsxStockReport(models.AbstractModel):
         format9.set_align('left')
         if data['category']:
             product = self.env['product.product'].search(
-                [('categ_id', 'in', data['category']), ('type', '=', 'product')])
+                [('categ_id', 'in', data['category']), ('type', '=', 'product'), ('qty_available', '>', 0)])
         else:
-            product = self.env['product.product'].search([('type', '=', 'product')])
+            product = self.env['product.product'].search([('type', '=', 'product'), ('qty_available', '>', 0)])
 
         if data['date']:
             sheet.write('A2', 'Date:', format6)
@@ -135,15 +135,16 @@ class PartnerXlsxStockReport(models.AbstractModel):
         s_no = 1
         for prod in product:
             rec = prod.with_context({'location': data['location'], 'to_date': data['date']})
-            sheet.write(row_num, col_num, s_no, format9)
-            sheet.write(row_num, col_num + 1, rec.default_code, format5)
-            sheet.write(row_num, col_num + 2, rec.name, format5)
-            sheet.write(row_num, col_num + 3, rec.qty_available, format5)
-            sheet.write(row_num, col_num + 4, rec.uom_id.name, format5)
+            if rec.qty_available > 0:
+                sheet.write(row_num, col_num, s_no, format9)
+                sheet.write(row_num, col_num + 1, rec.default_code, format5)
+                sheet.write(row_num, col_num + 2, rec.name, format5)
+                sheet.write(row_num, col_num + 3, rec.qty_available, format5)
+                sheet.write(row_num, col_num + 4, rec.uom_id.name, format5)
 
-            row_num += 1
-            s_no += 1
-            j += 1
+                row_num += 1
+                s_no += 1
+                j += 1
 
         # workbook.close()
         # output.seek(0)
