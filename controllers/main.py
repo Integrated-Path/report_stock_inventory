@@ -20,7 +20,7 @@ class XLSXReportController(http.Controller):
                     None,
                     headers=[
                         ('Content-Type', 'application/vnd.ms-excel'),
-                        ('Content-Disposition', content_disposition(report_name + '.xlsx'))
+                        ('Content-Disposition', content_disposition(report_obj.name + '.xlsx'))
                     ]
                 )
                 report_obj.get_xlsx_report(options, response)

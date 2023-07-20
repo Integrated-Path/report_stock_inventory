@@ -29,8 +29,11 @@ class InventoryReportPDF(models.AbstractModel):
         for product in products:
             for location in data['location']:
                 # calculate the quantity at location and date backward from stock quant and stock move tables.
-                quantity_at_location_date = self.env['stock.quant'].search(
-                    [('product_id', '=', product.id), ('location_id', '=', location)], limit=1).quantity
+                all_quant = self.env['stock.quant'].search(
+                    [('product_id', '=', product.id), ('location_id', '=', location)])
+                quantity_at_location_date = 0
+                for q in all_quant:
+                    quantity_at_location_date += q.quantity
                 for stock_move_to_date in stock_moves_to_date:
                     if (
                             stock_move_to_date.product_id.id == product.id and stock_move_to_date.location_id.id == location and stock_move_to_date.state == 'done'):
